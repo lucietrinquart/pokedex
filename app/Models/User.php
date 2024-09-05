@@ -17,8 +17,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'github_id',
         'name',
         'email',
+        'profile_picture_url',
+        'locale',
+        'theme',
         'password',
     ];
 
@@ -44,4 +48,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function pokemons()
+{
+  return $this->belongsToMany(Pokemon::class)
+              ->withPivot('created_at');
 }
+}
+
