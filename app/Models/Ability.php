@@ -13,7 +13,7 @@ class Ability extends Model
   
     public $translatedAttributes = ['name', 'description', 'effect'];
 
-    public function pokemonVariety()
+    public function pokemon_Variety()
     {
     return $this->belongsToMany(PokemonVariety::class);
     }

@@ -11,5 +11,10 @@ class MoveLearnMethod extends Model
 {
     use HasFactory, Translatable;
   
-    public $translatedAttributes = ['name', 'description', 'locale'];
+    public $translatedAttributes = ['name', 'description'];
+
+    public function pokemon_learn_move()
+{
+    return $this->hasMany(PokemonLearnMove::class);
+}
   }

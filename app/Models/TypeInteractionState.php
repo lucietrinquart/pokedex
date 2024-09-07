@@ -14,4 +14,8 @@ class TypeInteractionState extends Model
     'name' => 'string',
     'multiplier' => 'float',
   ];
+  public function type_interactions()
+{
+  return $this->hasMany(TypeInteraction::class);
+}
 }

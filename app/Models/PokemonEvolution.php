@@ -41,4 +41,29 @@ class PokemonEvolution extends Model
     {
         return $this->belongsTo(Item::class, 'item_id');
     }
+
+    public function know_move_type_id()
+    {
+        return $this->belongsTo(Type::class, 'know_move_type_id');
+    }
+
+    public function party_type_id()
+    {
+        return $this->belongsTo(Type::class, 'party_type_id');
+    }
+
+    public function types()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
+    public function party_type_id()
+    {
+        return $this->belongsTo(PokemonVariety::class, 'pokemon_veriety_id');
+    }
+
+    public function types()
+    {
+        return $this->belongsTo(PokemonVariety::class, 'evolves_to_id');
+    }
 }

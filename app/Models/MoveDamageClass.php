@@ -12,4 +12,9 @@ class MoveDamageClass extends Model
     use HasFactory;
 
     public $translatedAttributes = ['name', 'description'];
+
+    public function move()
+{
+    return $this->hasMany(Move::class);
+}
 }

@@ -22,4 +22,24 @@ class Move extends Model implements TranslatableContract
     'pp' => 'int',
     'priority' => 'int',
   ];
+
+  public function pokemon_evolutions()
+{
+    return $this->hasMany(PokemonEvolution::class);
+}
+
+public function Type()
+{
+    return $this->belongsTo(Type::class);
+}
+public function pokemon_learn_move()
+{
+    return $this->hasMany(PokemonLearnMove::class);
+}
+
+public function move_damage_class()
+{
+    return $this->belongsTo(MoveDamageClass::class);
+}
+
 }
