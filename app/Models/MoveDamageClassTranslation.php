@@ -9,5 +9,5 @@ class MoveDamageClassTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['local','name', 'description'];
+    protected $fillable = ['name', 'description'];
 }

@@ -13,10 +13,13 @@ return new class extends Migration
     {
     Schema::create('type_interactions', function (Blueprint $table) {
         $table->bigIncrements('id');
-        $table->ForeignIdFor(App\Models\Type::class)->constrained()->onDelete('cascade');
-        $table->ForeignIdFor(App\Models\Type::class)->constrained()->onDelete('cascade');
+        $table->ForeignIdFor(App\Models\Type::class, "from_type_id")->constrained()->onDelete('cascade');
+        $table->ForeignIdFor(App\Models\Type::class, "to_type_id")->constrained()->onDelete('cascade');
         $table->ForeignIdFor(App\Models\TypeInteractionState::class)->constrained()->onDelete('cascade');
         $table->timestamps();
+
+        $table->unique(['from_type_id', 'to_type_id']);
+
     });
     }
     

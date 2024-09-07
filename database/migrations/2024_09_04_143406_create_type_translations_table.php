@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
 {
-  Schema::create('pokemon_translations', function (Blueprint $table) {
+  Schema::create('type_translations', function (Blueprint $table) {
     $table->bigIncrements('id');
     $table->ForeignIdFor(App\Models\Type::class)->constrained()->onDelete('cascade');
     $table->string('locale')->index();
     $table->string('name');
     $table->timestamps();
 
-    $table->unique(['pokemon_id', 'locale']);
+    $table->unique(['type_id', 'locale']);
   });
 }
 

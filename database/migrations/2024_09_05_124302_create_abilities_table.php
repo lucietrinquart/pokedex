@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('abilities', function (Blueprint $table) {
             $table->id();
-            $table->string('sprite_url')->nullable();
             $table->timestamps();
-        });
-    }
+          });
+        }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('abilities');
     }
 };

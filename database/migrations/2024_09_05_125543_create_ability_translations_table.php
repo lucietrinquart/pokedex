@@ -11,23 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('move_damage_class_translations', function (Blueprint $table) {
+        Schema::create('ability_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->ForeignIdFor(App\Models\MoveDamageClassTranslation::class)->constrained()->onDelete('cascade');
+            $table->ForeignIdFor(App\Models\Ability::class)->constrained()->onDelete('cascade');
             $table->string('locale')->index();
             $table->string('name')->nullable();
-            $table->string('description')->nullable();
+            $table->string('effect')->nullable();
+            $table->string('description');
             $table->timestamps();
-
-            $table->unique(['move_damage_class_id', 'locale']);
-        });
-    }
+        
+            $table->unique(['ability_id', 'locale']);
+          });
+        }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('move_damage_class_translations');
+        Schema::dropIfExists('ability_translations');
     }
 };

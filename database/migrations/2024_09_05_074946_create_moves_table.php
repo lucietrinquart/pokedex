@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('priority');
             $table->ForeignIdFor(App\Models\Type::class)->constrained()->onDelete('cascade');
             $table->timestamps();
+
+            $table->unique(['move_damage_class_id', 'type_id']);
         });
     }
 

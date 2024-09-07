@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 
-class Ability extends Model
+class GameVersion extends Model implements TranslatableContract
 {
-    use HasFactory, Translatable;
-  
-    public $translatedAttributes = ['name', 'description', 'effect'];
+  use HasFactory, Translatable;
 
-    public function pokemonVariety()
-    {
-    return $this->belongsToMany(PokemonVariety::class);
-    }
-  
-  }
+  public $translatedAttributes = ['name'];
+
+  protected $fillable = ['generic_name', 'generation'];
+
+}

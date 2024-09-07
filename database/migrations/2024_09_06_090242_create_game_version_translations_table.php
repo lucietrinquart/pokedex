@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('item_translations', function (Blueprint $table) {
+        Schema::create('game_version_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->ForeignIdFor(App\Models\Item::class)->constrained()->onDelete('cascade');
-            $table->string('local')->index();
+            $table->ForeignIdFor(App\Models\GameVersion::class)->constrained()->onDelete('cascade');
+            $table->string('locale')->index();
             $table->string('name');
-            $table->string('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['item_id', 'locale']);
+            $table->unique(['game_version_id', 'locale']);
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_translations');
+        Schema::dropIfExists('game_version_translations');
     }
 };

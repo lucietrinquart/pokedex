@@ -29,4 +29,15 @@ public function sprites()
 {
   return $this->hasOne(PokemonVarietySprite::class);
 }
+
+public function Ability()
+{
+  return $this->belongsToMany(Ability::class);
+}
+
+public function type()
+{
+  return $this->belongsToMany(Type::class);
+}
+
 }

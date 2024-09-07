@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('item_translations', function (Blueprint $table) {
+        Schema::create('pokemon_variety_type', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->ForeignIdFor(App\Models\Item::class)->constrained()->onDelete('cascade');
-            $table->string('local')->index();
-            $table->string('name');
-            $table->string('description')->nullable();
+            $table->ForeignIdFor(App\Models\Ability::class)->constrained()->onDelete('cascade');
+            $table->ForeignIdFor(App\Models\PokemonVariety::class)->constrained()->onDelete('cascade');
+            $table->boolean('is_hidden');
+            $table->integer('slot');
             $table->timestamps();
-
-            $table->unique(['item_id', 'locale']);
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_translations');
+        Schema::dropIfExists('pokemon_variety_type');
     }
 };

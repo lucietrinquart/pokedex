@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('type_interaction_states', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('multiplier');
+            $table->string('name')->nullable();
+            $table->float('multiplier');
             $table->timestamps();
         });
     }

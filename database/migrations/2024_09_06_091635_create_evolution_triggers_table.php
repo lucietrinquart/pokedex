@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('evolution_triggers', function (Blueprint $table) {
             $table->id();
-            $table->string('sprite_url')->nullable();
+            $table->string('slug');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('evolution_triggers');
     }
 };
