@@ -13,6 +13,6 @@ class PokemonTranslation extends Model
 
   public function type_interaction_states()
 {
-  return $this->belongsTo(TypeInteractionState ::class);
+  return $this->belongsTo(TypeInteractionState::class);
 }
 }
