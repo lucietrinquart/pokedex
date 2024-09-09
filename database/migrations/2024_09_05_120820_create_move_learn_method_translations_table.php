@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['move_learn_method_id', 'locale']);
+            $table->unique(['move_learn_method_id', 'locale'], 'move_learn_method_trans_unique');
           });
         }
 

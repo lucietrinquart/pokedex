@@ -9,17 +9,23 @@ class PokemonEvolution extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['pokemon_veriety_id', 'evolves_to_id', 'held_item_id', 'item_id', 'know_move_id', 'know_move_type_id', 'party_type_id', 'party_species_id', 'trade_species_id', 'evolution_trigger_id', 'gender', 'location', 'min_affection', 'min_happiness', 'min_level', 'need_overwold_rain', 'relative_physical_stats', 'time_of_day', 'turn_upside_down'];
-
-    protected $casts = [
-      'turn_upside_down' => 'boolean',
-      'need_overwold_rain' => 'boolean',
-      'gender' => 'boolean'
+    protected $fillable = [
+        'pokemon_variety_id', 'evolves_to_id', 'held_item_id', 'item_id', 'know_move_id', 
+        'know_move_type_id', 'party_type_id', 'party_species_id', 'trade_species_id', 
+        'evolution_trigger_id', 'gender', 'location', 'min_affection', 'min_happiness', 
+        'min_level', 'need_overworld_rain', 'relative_physical_stats', 'time_of_day', 
+        'turn_upside_down'
     ];
 
-    public function evolution_triggers()
+    protected $casts = [
+        'turn_upside_down' => 'boolean',
+        'need_overworld_rain' => 'boolean',
+        'gender' => 'boolean'
+    ];
+
+    public function evolution_trigger()
     {
-    return $this->belongsTo(EvolutionTrigger::class);
+        return $this->belongsTo(EvolutionTrigger::class);
     }
 
     public function trade_species()
@@ -32,37 +38,32 @@ class PokemonEvolution extends Model
         return $this->belongsTo(Pokemon::class, 'party_species_id');
     }
 
-    public function items_held()
+    public function held_item()
     {
         return $this->belongsTo(Item::class, 'held_item_id');
     }
     
-    public function items_id()
+    public function item()
     {
         return $this->belongsTo(Item::class, 'item_id');
     }
 
-    public function know_move_type_id()
+    public function know_move_type()
     {
         return $this->belongsTo(Type::class, 'know_move_type_id');
     }
 
-    public function party_type_id()
+    public function party_type()
     {
         return $this->belongsTo(Type::class, 'party_type_id');
     }
 
-    public function types()
+    public function pokemon_variety()
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsTo(PokemonVariety::class, 'pokemon_variety_id');
     }
 
-    public function party_type_id()
-    {
-        return $this->belongsTo(PokemonVariety::class, 'pokemon_veriety_id');
-    }
-
-    public function types()
+    public function evolves_to()
     {
         return $this->belongsTo(PokemonVariety::class, 'evolves_to_id');
     }

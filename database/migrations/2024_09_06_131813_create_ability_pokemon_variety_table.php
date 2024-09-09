@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pokemon_variety_type', function (Blueprint $table) {
+        Schema::create('ability_pokemon_variety', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->ForeignIdFor(App\Models\Ability::class)->constrained()->onDelete('cascade');
             $table->ForeignIdFor(App\Models\PokemonVariety::class)->constrained()->onDelete('cascade');

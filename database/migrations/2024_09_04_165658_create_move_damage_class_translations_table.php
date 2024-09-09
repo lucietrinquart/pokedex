@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('move_damage_class_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->ForeignIdFor(App\Models\MoveDamageClassTranslation::class)->constrained()->onDelete('cascade');
+            $table->ForeignIdFor(App\Models\MoveDamageClass::class)->constrained()->onDelete('cascade');
             $table->string('locale')->index();
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['move_damage_class_id', 'locale']);
+            $table->unique(['move_damage_class_id', 'locale'], 'move_damage_class_trans_unique');
         });
     }
 
