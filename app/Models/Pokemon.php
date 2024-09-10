@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
+use Astrotomic\Translatable\Translatable;//importe pour faire le translate
+use Laravel\Scout\Searchable;//importe pour faire la fonction recherche
 
 class Pokemon extends Model implements TranslatableContract
 {
-  use HasFactory, Translatable;
+  use HasFactory, Translatable, Searchable;
 
   // Liste des attributs traduits
   public $translatedAttributes = ['name', 'category'];
@@ -33,6 +34,12 @@ public function defaultVariety()
 {
   return $this->hasOne(PokemonVariety::class)
               ->where('is_default', true);
+}
+
+public function toSearchableArray(): array//permet de faire une recherche plus exhaustive
+{
+  return $this->load(['varieties', 'varieties.types'])
+              ->toArray();
 }
 
 public function catchByUsers()
