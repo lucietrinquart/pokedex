@@ -16,8 +16,8 @@ return new class extends Migration
             $table->ForeignIdFor(App\Models\Ability::class)->constrained()->onDelete('cascade');
             $table->string('locale')->index();
             $table->string('name')->nullable();
-            $table->string('effect')->nullable();
-            $table->string('description');
+            $table->text('effect')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         
             $table->unique(['ability_id', 'locale']);

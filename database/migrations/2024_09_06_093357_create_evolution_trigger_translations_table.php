@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('evolution_trigger_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->ForeignIdFor(App\Models\EvolutionTrigger ::class)->constrained()->onDelete('cascade');
+            $table->ForeignIdFor(App\Models\EvolutionTrigger::class)->constrained()->onDelete('cascade');
             $table->string('locale')->index();
             $table->string('name');
             $table->timestamps();

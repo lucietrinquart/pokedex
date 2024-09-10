@@ -30,12 +30,12 @@ public function sprites()
   return $this->hasOne(PokemonVarietySprite::class);
 }
 
-public function Ability()
+public function abilities()
 {
   return $this->belongsToMany(Ability::class);
 }
 
-public function type()
+public function types()
 {
   return $this->belongsToMany(Type::class);
 }

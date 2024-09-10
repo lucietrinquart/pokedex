@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('move_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->ForeignIdFor(App\Models\Move::class)->constrained()->onDelete('cascade');
-            $table->integer('local');
-            $table->integer('name');
-            $table->integer('description');
+            $table->string('locale')->index();
+            $table->string('name');
+            $table->string('description')->nullable();
             $table->timestamps();
           });
         }

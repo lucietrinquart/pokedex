@@ -16,9 +16,9 @@ return new class extends Migration
             $table->ForeignIdFor(App\Models\PokemonVariety::class, "pokemon_variety_id")->constrained()->onDelete('cascade');
             $table->ForeignIdFor(App\Models\PokemonVariety::class, "evolves_to_id");
             $table->ForeignIdFor(App\Models\Item::class, "held_item_id")->nullable();
-            $table->ForeignIdFor(App\Models\Item::class, "item_id")->constrained()->onDelete('cascade');
+            $table->ForeignIdFor(App\Models\Item::class, "item_id")->nullable();
             $table->ForeignIdFor(App\Models\Move::class, "known_move_id")->nullable();
-            $table->ForeignIdFor(App\Models\Type::class, 'know_move_type_id')->nullable();
+            $table->ForeignIdFor(App\Models\Type::class, 'known_move_type_id')->nullable();
             $table->ForeignIdFor(App\Models\Type::class, "party_type_id")->nullable();
             $table->ForeignIdFor(App\Models\Pokemon::class, "party_species_id")->nullable();
             $table->ForeignIdFor(App\Models\Pokemon::class, "trade_species_id")->nullable();

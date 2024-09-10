@@ -48,9 +48,4 @@ public function pokemon_evolutions_as_party()
 {
     return $this->hasMany(PokemonEvolution::class, 'party_species_id');
 }
-
-public function pokemon_variesties()
-{
-    return $this->hasMany(PokemonVariety::class);
-}
 }
