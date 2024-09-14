@@ -40,9 +40,9 @@ public function types()
   return $this->belongsToMany(Type::class);
 }
 
-public function pokemon_veriety_id()
+public function pokemon_variety_id()
 {
-  return $this->hasMany(PokemonEvolution::class, 'pokemon_veriety_id');
+  return $this->hasMany(PokemonEvolution::class, 'pokemon_variety_id');
 }
 
 public function evolves_to_id()
