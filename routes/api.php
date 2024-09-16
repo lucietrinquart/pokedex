@@ -14,7 +14,11 @@ Route::group(['prefix' => 'pokemon'], function (){
     Route::get('/{pokemon}', [PokemonController::class, 'show']); // pour afficher un Pokémon
     Route::get('/{pokemon}/varieties', [PokemonController::class, 'showVarieties']); // pour afficher les variétés
     Route::get('/{pokemon}/evolution', [PokemonController::class, 'showEvolutionPokemon']); // pour afficher les évolutions
-    Route::get('/{pokemon}/sensibilite', [PokemonController::class, 'pokemonsensibilite']); // pour afficher les évolutions
+    Route::get('/{pokemon}/sensibilite', [PokemonController::class, 'pokemonsensibilite']); // pour afficher les types
+    Route::get('/{pokemon}/move', [PokemonController::class, 'showmoves']);
+    Route::get('/{pokemon}/evolution2', [PokemonController::class, 'evolution2']);
+
 });
 
 Route::get('/item', [PokemonController::class, 'testitem']);
+Route::get('/type', [PokemonController::class, 'testtype']);

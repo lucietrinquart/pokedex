@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Pokemon;
 use App\Models\PokemonEvolution;
+use App\Models\PokemonVariety;
+use App\Models\TypeInteraction;
 use App\Models\Type;
 use App\Models\Item;
+use App\Models\Move;
 use Illuminate\Http\Request;
 
 class PokemonController extends Controller
@@ -87,10 +90,8 @@ private function getPastEvolutionsRecursively($pokemonVarietyId)
 
 public function pokemonsensibilite(Pokemon $pokemon)
 {
-    // Récupérer la variété par défaut du Pokémon
     $pokemonVarietyId = $pokemon->defaultVariety->id;
 
-    // Récupérer les types directement liés à cette variété via la table pokemon_variety_type
     return Type::whereIn('id', function($query) use ($pokemonVarietyId) {
         $query->select('type_id')
               ->from('pokemon_variety_type')
@@ -98,8 +99,27 @@ public function pokemonsensibilite(Pokemon $pokemon)
     })->get();
 }
 
+public function showmoves(Pokemon $pokemon)
+{
+    $pokemonVarietyId = $pokemon->defaultVariety->id;
+
+    return Move::whereIn('id', function($query) use ($pokemonVarietyId) {
+        $query->select('move_id')
+              ->from('pokemon_learn_moves')
+              ->where('pokemon_variety_id', $pokemonVarietyId);
+    })->get();
+}
+
+public function evolution2(Pokemon $pokemon)
+{
+    return $pokemon->load(['defaultVariety.evolves_to_id', 'defaultVariety.pokemon_variety_id']);//permet de récupéré le donnée sprite et type qui sont dans defaultvariety dans api/pokemon/(id du pokemon)
+}
 
 
-
+public function testtype()
+    {
+        return Type::with([])
+        ->get();
+    }
 
 }
