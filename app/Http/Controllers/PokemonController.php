@@ -6,6 +6,7 @@ use App\Models\Pokemon;
 use App\Models\PokemonEvolution;
 use App\Models\PokemonVariety;
 use App\Models\TypeInteraction;
+use App\Models\GameVersion;
 use App\Models\Type;
 use App\Models\Item;
 use App\Models\Move;
@@ -50,15 +51,13 @@ public function showEvolutionPokemon(Pokemon $pokemon)
     // Charger toutes les évolutions passées
     $pastEvolutions = $this->getPastEvolutionsRecursively($pokemon->defaultVariety->id);
 
-    // Retourner directement les informations du Pokémon et toutes ses évolutions passées et futures
     return [
-        'pokemon' => $pokemon->load('defaultVariety', 'defaultVariety.pokemon'), // Charger les informations du Pokémon de base
-        'evolution_avant' => $pastEvolutions, // Charger les évolutions passées
-        'evolution_apres' => $futureEvolutions // Charger les évolutions futures
+        'pokemon' => $pokemon->load('defaultVariety', 'defaultVariety.pokemon'), 
+        'evolution_avant' => $pastEvolutions, 
+        'evolution_apres' => $futureEvolutions 
     ];
 }
 
-// Fonction pour récupérer les évolutions futures (comme avant)
 private function getEvolutionsRecursively($pokemonVarietyId)
 {
     $evolutions = PokemonEvolution::where('pokemon_variety_id', $pokemonVarietyId)
@@ -73,7 +72,6 @@ private function getEvolutionsRecursively($pokemonVarietyId)
     return $evolutions;
 }
 
-// Fonction pour récupérer les évolutions passées
 private function getPastEvolutionsRecursively($pokemonVarietyId)
 {
     $pastEvolutions = PokemonEvolution::where('evolves_to_id', $pokemonVarietyId)
@@ -120,6 +118,18 @@ public function testtype()
     {
         return Type::with([])
         ->get();
+    }
+
+    public function testversion(GameVersion $version)
+    {
+        return $version->load(['pokemon_learn_move.pokeon_variety']);
+
+    }
+
+    public function faiblesse(Pokemon $pokemon)
+    {
+        return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
+
     }
 
 }
