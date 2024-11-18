@@ -18,6 +18,11 @@ Route::group(['prefix' => 'pokemon'], function (){
     Route::get('/{pokemon}/move', [PokemonController::class, 'showmoves']);
     Route::get('/{pokemon}/evolution2', [PokemonController::class, 'evolution2']);
     Route::get('/{pokemon}/typefaiblesse', [PokemonController::class, 'faiblesse']);
+<<<<<<< Updated upstream
+=======
+    Route::get('/{pokemon}/abilities', [PokemonController::class, 'abiliti']);
+    Route::get('/{pokemon}/version/{version}', [PokemonController::class, 'version']);
+>>>>>>> Stashed changes
 
 });
 
