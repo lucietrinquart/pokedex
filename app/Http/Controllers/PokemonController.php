@@ -242,45 +242,45 @@ public function testtype()
     ]);
 }
 
-public function typepourpokemon($typeId)
-    {
-        return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
+// public function typepourpokemon($typeId)
+//     {
+//         // return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
 
-    $faible = [];
-    $resiste = [];
-    $immunities = [];
+//     $faible = [];
+//     $resiste = [];
+//     $immunities = [];
 
-    foreach ($types as $type) {
-        $interactions = $type->testtypeinteractionBy()->with('typeInteractionState')->get();
+//     foreach ($types as $type) {
+//         $interactions = $type->testtypeinteractionBy()->with('typeInteractionState')->get();
 
-        foreach ($interactions as $interaction) {
-            $typeInteractionState = $interaction->typeInteractionState;
+//         foreach ($interactions as $interaction) {
+//             $typeInteractionState = $interaction->typeInteractionState;
 
-            if (!$typeInteractionState) {
-                continue; 
-            }
+//             if (!$typeInteractionState) {
+//                 continue; 
+//             }
 
-            $multiplier = $typeInteractionState->multiplier;
-            $typeName = $interaction->testtypeinteractionTo->name;
+//             $multiplier = $typeInteractionState->multiplier;
+//             $typeName = $interaction->testtypeinteractionTo->name;
 
-            if ($multiplier > 1) {
-                $faible[$typeName] = ($faible[$typeName] ?? 1) * $multiplier;
-            } elseif ($multiplier < 1 && $multiplier > 0) {
-                $resiste[$typeName] = ($resiste[$typeName] ?? 1) * $multiplier;
-            } elseif ($multiplier == 0) {
-                $immunities[] = $typeName;
-            }
-        }
-    }
+//             if ($multiplier > 1) {
+//                 $faible[$typeName] = ($faible[$typeName] ?? 1) * $multiplier;
+//             } elseif ($multiplier < 1 && $multiplier > 0) {
+//                 $resiste[$typeName] = ($resiste[$typeName] ?? 1) * $multiplier;
+//             } elseif ($multiplier == 0) {
+//                 $immunities[] = $typeName;
+//             }
+//         }
+//     }
 
-    return response()->json([
-        'pokemon' => $pokemon->name,
-        'types' => $types->pluck('name'), 
-        'faible' => $faible,
-        'resiste' => $resiste,
-        'immunities' => $immunities
-    ]);
-}
+//     return response()->json([
+//         'pokemon' => $pokemon->name,
+//         'types' => $types->pluck('name'), 
+//         'faible' => $faible,
+//         'resiste' => $resiste,
+//         'immunities' => $immunities
+//     ]);
+// }
 
 public function typepourpokemon($typeId)
     {
