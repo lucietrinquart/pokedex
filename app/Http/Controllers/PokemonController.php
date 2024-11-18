@@ -35,6 +35,8 @@ public function showVarieties(Pokemon $pokemon)
     return $pokemon->varieties()->with(['sprites', 'types'])->get();//recupère dans api/pokemon/(id du pokemon)/varieties les données directement
 }
 
+
+
 public function search(Request $request){//resquest contient toutes les donnée (route, utilisateur...)
     return Pokemon::search($request->input('query'))//contient ce que veux l'utilisateur
                   ->get()
@@ -160,6 +162,45 @@ public function testtype()
 
     }
 
+    public function version(Pokemon $pokemon, $versionId)
+    {
+        // Récupérer l'ID de la variété par défaut du Pokémon
+        $pokemonVarietyId = $pokemon->defaultVariety->id;
+
+        // Récupérer toutes les attaques pour ce Pokémon dans la version spécifique
+        $moves = Move::whereIn('id', function($query) use ($pokemonVarietyId, $versionId) {
+            $query->select('move_id')
+                  ->from('pokemon_learn_moves')
+                  ->where('pokemon_variety_id', $pokemonVarietyId)
+                  ->where('game_version_id', $versionId);
+        })
+        ->with(['move_damage_class']) // Si vous voulez inclure les informations de classe de dégâts
+        ->get()
+        ->map(function($move) use ($pokemonVarietyId, $versionId) {
+            // Récupérer les détails spécifiques d'apprentissage pour cette attaque
+            $learnDetails = \App\Models\PokemonLearnMove::where([
+                'pokemon_variety_id' => $pokemonVarietyId,
+                'move_id' => $move->id,
+                'game_version_id' => $versionId
+            ])
+            ->with('move_learn_methods')
+            ->first();
+
+            // Ajouter les détails d'apprentissage à l'attaque
+            return [
+                'move' => $move,
+                'learn_method' => $learnDetails->move_learn_methods,
+                'level' => $learnDetails->level
+            ];
+        });
+
+        return response()->json([
+            'pokemon' => $pokemon->only(['id', 'name']),
+            'version' => GameVersion::find($versionId)->only(['id', 'generic_name', 'generation']),
+            'moves' => $moves
+        ]);
+    }
+
     public function faiblesse(Pokemon $pokemon): JsonResponse
 {
     $pokemon->load(['defaultVariety.types']);
@@ -200,6 +241,46 @@ public function testtype()
         'immunities' => $immunities
     ]);
 }
+
+// public function typepourpokemon($typeId)
+//     {
+//         // return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
+
+//     $faible = [];
+//     $resiste = [];
+//     $immunities = [];
+
+//     foreach ($types as $type) {
+//         $interactions = $type->testtypeinteractionBy()->with('typeInteractionState')->get();
+
+//         foreach ($interactions as $interaction) {
+//             $typeInteractionState = $interaction->typeInteractionState;
+
+//             if (!$typeInteractionState) {
+//                 continue; 
+//             }
+
+//             $multiplier = $typeInteractionState->multiplier;
+//             $typeName = $interaction->testtypeinteractionTo->name;
+
+//             if ($multiplier > 1) {
+//                 $faible[$typeName] = ($faible[$typeName] ?? 1) * $multiplier;
+//             } elseif ($multiplier < 1 && $multiplier > 0) {
+//                 $resiste[$typeName] = ($resiste[$typeName] ?? 1) * $multiplier;
+//             } elseif ($multiplier == 0) {
+//                 $immunities[] = $typeName;
+//             }
+//         }
+//     }
+
+//     return response()->json([
+//         'pokemon' => $pokemon->name,
+//         'types' => $types->pluck('name'), 
+//         'faible' => $faible,
+//         'resiste' => $resiste,
+//         'immunities' => $immunities
+//     ]);
+// }
 
 public function typepourpokemon($typeId)
     {
