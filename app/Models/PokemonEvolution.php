@@ -67,4 +67,8 @@ class PokemonEvolution extends Model
     {
         return $this->belongsTo(PokemonVariety::class, 'evolves_to_id');
     }
+    public function known_move_id()
+    {
+        return $this->belongsTo(Move::class);
+    }
 }
