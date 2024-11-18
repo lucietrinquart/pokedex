@@ -10,13 +10,18 @@ use App\Models\GameVersion;
 use App\Models\Type;
 use App\Models\Item;
 use App\Models\Move;
+use App\Models\EvolutionTrigger;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
+
 
 class PokemonController extends Controller
 {
     public function index()
     {
-        return Pokemon::with(['defaultVariety', 'defaultVariety.sprites'])//recupère dans la table pokemon le default variéty pour ensuite cherche le sprtite dans le api/pokemon
+        return Pokemon::with(['defaultVariety', 'defaultVariety.sprites', 'defaultVariety.types'])//recupère dans la table pokemon le default variéty pour ensuite cherche le sprtite dans le api/pokemon
                     ->paginate(20);//permet de faire une pagination de 20 pokemon
     }
 
@@ -63,7 +68,7 @@ public function showEvolutionPokemon(Pokemon $pokemon)
 private function getEvolutionsRecursively($pokemonVarietyId)
 {
     $evolutions = PokemonEvolution::where('pokemon_variety_id', $pokemonVarietyId)
-        ->with('evolves_to.pokemon') // Charger les informations du Pokémon évolué
+        ->with('evolves_to.pokemon', 'evolves_to.sprites') // Charger les informations du Pokémon évolué
         ->get();
 
     foreach ($evolutions as $evolution) {
@@ -77,7 +82,7 @@ private function getEvolutionsRecursively($pokemonVarietyId)
 private function getPastEvolutionsRecursively($pokemonVarietyId)
 {
     $pastEvolutions = PokemonEvolution::where('evolves_to_id', $pokemonVarietyId)
-        ->with('pokemon_variety.pokemon') // Charger les informations du Pokémon précédent
+        ->with('pokemon_variety.pokemon', 'pokemon_variety.sprites') // Charger les informations du Pokémon précédent
         ->get();
 
     foreach ($pastEvolutions as $evolution) {
@@ -115,10 +120,39 @@ public function evolution2(Pokemon $pokemon)
     return $pokemon->load(['defaultVariety.evolves_to_id', 'defaultVariety.pokemon_variety_id']);//permet de récupéré le donnée sprite et type qui sont dans defaultvariety dans api/pokemon/(id du pokemon)
 }
 
+public function abiliti(Pokemon $pokemon)
+{
+    return $pokemon->load(['defaultVariety.abilities']);
+}
+
 
 public function testtype()
     {
         return Type::with([])
+        ->get();
+    }
+
+    public function evolution()
+    {
+        return PokemonEvolution::with([])
+        ->get();
+    }
+
+    
+    public function item()
+    {
+        return Item::with([])
+        ->get();
+    }
+
+    public function move()
+    {
+        return Move::with([])
+        ->get();
+    }
+    public function evolutiontrigger()
+    {
+        return EvolutionTrigger::with([])
         ->get();
     }
 
@@ -212,6 +246,54 @@ public function typepourpokemon($typeId)
     {
         return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
 
+    $faible = [];
+    $resiste = [];
+    $immunities = [];
+
+    foreach ($types as $type) {
+        $interactions = $type->testtypeinteractionBy()->with('typeInteractionState')->get();
+
+        foreach ($interactions as $interaction) {
+            $typeInteractionState = $interaction->typeInteractionState;
+
+            if (!$typeInteractionState) {
+                continue; 
+            }
+
+            $multiplier = $typeInteractionState->multiplier;
+            $typeName = $interaction->testtypeinteractionTo->name;
+
+            if ($multiplier > 1) {
+                $faible[$typeName] = ($faible[$typeName] ?? 1) * $multiplier;
+            } elseif ($multiplier < 1 && $multiplier > 0) {
+                $resiste[$typeName] = ($resiste[$typeName] ?? 1) * $multiplier;
+            } elseif ($multiplier == 0) {
+                $immunities[] = $typeName;
+            }
+        }
     }
 
+    return response()->json([
+        'pokemon' => $pokemon->name,
+        'types' => $types->pluck('name'), 
+        'faible' => $faible,
+        'resiste' => $resiste,
+        'immunities' => $immunities
+    ]);
 }
+
+public function typepourpokemon($typeId)
+    {
+        $pokemons = Pokemon::whereHas('defaultVariety.types', function($query) use ($typeId) {
+            $query->where('types.id', $typeId);
+        })
+        ->with(['defaultVariety.sprites', 'defaultVariety.types'])
+        ->get();
+
+        return response()->json($pokemons);
+    }
+
+
+} 
+
+

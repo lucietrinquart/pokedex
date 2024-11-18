@@ -42,4 +42,5 @@ public function move_damage_class()
     return $this->belongsTo(MoveDamageClass::class);
 }
 
+
 }
