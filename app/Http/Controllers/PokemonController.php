@@ -128,9 +128,6 @@ public function testtype()
 
     }
 
-<<<<<<< Updated upstream
-    public function faiblesse(Pokemon $pokemon)
-=======
     public function version(Pokemon $pokemon, $versionId)
     {
         // Récupérer l'ID de la variété par défaut du Pokémon
@@ -212,7 +209,6 @@ public function testtype()
 }
 
 public function typepourpokemon($typeId)
->>>>>>> Stashed changes
     {
         return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
 
