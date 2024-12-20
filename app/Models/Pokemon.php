@@ -55,4 +55,9 @@ public function pokemon_evolutions_as_party()
 {
     return $this->hasMany(PokemonEvolution::class, 'party_species_id');
 }
+
+public function user_pokemon()
+{
+    return $this->belongsToMany(User::class);
+}
 }

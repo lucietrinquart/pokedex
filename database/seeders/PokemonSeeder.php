@@ -749,4 +749,6 @@ class PokemonSeeder extends Seeder
             });
         });
     }
+
+    
 }

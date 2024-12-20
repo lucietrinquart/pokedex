@@ -13,6 +13,7 @@ use App\Models\Move;
 use App\Models\EvolutionTrigger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -161,6 +162,12 @@ public function testtype()
         return $version->load(['pokemon_learn_move.pokeon_variety']);
 
     }
+    public function touteversion()
+    {
+        return GameVersion::with([])
+        ->get();
+
+    }
 
     public function version(Pokemon $pokemon, $versionId)
     {
@@ -242,45 +249,7 @@ public function testtype()
     ]);
 }
 
-// public function typepourpokemon($typeId)
-//     {
-//         // return $pokemon->load(['defaultVariety', 'defaultVariety.types']);
 
-//     $faible = [];
-//     $resiste = [];
-//     $immunities = [];
-
-//     foreach ($types as $type) {
-//         $interactions = $type->testtypeinteractionBy()->with('typeInteractionState')->get();
-
-//         foreach ($interactions as $interaction) {
-//             $typeInteractionState = $interaction->typeInteractionState;
-
-//             if (!$typeInteractionState) {
-//                 continue; 
-//             }
-
-//             $multiplier = $typeInteractionState->multiplier;
-//             $typeName = $interaction->testtypeinteractionTo->name;
-
-//             if ($multiplier > 1) {
-//                 $faible[$typeName] = ($faible[$typeName] ?? 1) * $multiplier;
-//             } elseif ($multiplier < 1 && $multiplier > 0) {
-//                 $resiste[$typeName] = ($resiste[$typeName] ?? 1) * $multiplier;
-//             } elseif ($multiplier == 0) {
-//                 $immunities[] = $typeName;
-//             }
-//         }
-//     }
-
-//     return response()->json([
-//         'pokemon' => $pokemon->name,
-//         'types' => $types->pluck('name'), 
-//         'faible' => $faible,
-//         'resiste' => $resiste,
-//         'immunities' => $immunities
-//     ]);
-// }
 
 public function typepourpokemon($typeId)
     {
@@ -292,6 +261,46 @@ public function typepourpokemon($typeId)
 
         return response()->json($pokemons);
     }
+
+    public function __construct()
+    {
+        auth()->check();
+    }
+
+
+    public function addPokemonToUser(Request $request, $pokemonId)
+    {
+        $user = Auth::user();
+        $pokemon = Pokemon::findOrFail($pokemonId);
+
+        // Vérifie si le Pokémon n'est pas déjà attaché
+        if (!$user->pokemons()->where('pokemon_id', $pokemonId)->exists()) {
+            $user->pokemons()->attach($pokemonId);
+            return response()->json(['message' => 'Pokémon ajouté avec succès']);
+        }
+
+        return response()->json(['message' => 'Ce Pokémon est déjà dans votre collection'], 400);
+    }
+
+    public function getUserPokemons()
+    {
+        $user = Auth::user();
+        return response()->json([
+            'pokemons' => $user->pokemons()
+                ->with(['translations' => function($query) use ($user) {
+                    $query->where('locale', $user->locale);
+                }])
+                ->get()
+        ]);
+    }
+
+    public function removePokemonFromUser($pokemonId)
+    {
+        $user = Auth::user();
+        $user->pokemons()->detach($pokemonId);
+        return response()->json(['message' => 'Pokémon retiré avec succès']);
+    }
+
 
 
 } 
