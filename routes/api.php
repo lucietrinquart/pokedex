@@ -16,7 +16,7 @@ Route::prefix('auth')->group(function () {
     Route::get('/callback', [OAuthController::class, 'callback']);
     Route::middleware('auth:sanctum')->post('/logout', [OAuthController::class, 'logout']);
 });
-Route::get('/{pokemon}/move', [PokemonController::class, 'showmoves']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
